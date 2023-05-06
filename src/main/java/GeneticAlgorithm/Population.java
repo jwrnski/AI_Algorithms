@@ -10,9 +10,12 @@ public class Population {
     public static byte[] chromosome = new byte[mi*2];
     public static float[] ans = new float[5];
 
+    // Generates a chromosome with correct genotypes.
     public static void generateChromosome(){
         chromosome = GeneticOperator.generateChromosome();
     }
+
+    // Generates a population of chromosomes. Fills in a two-dimensional array with N amount of chromosomes.
     public static byte[][] generatePopulation(byte N){
         byte[][] population = new byte[N][2*mi];
         generateChromosome();
@@ -26,6 +29,7 @@ public class Population {
         return population;
     }
 
+    // Calculates the average of fitness function values.
     public static void avg(float[] ans){
         int len = ans.length;
         for(int i=0; i<len; i++){
@@ -34,6 +38,7 @@ public class Population {
         avg /= len;
     }
 
+    // Simply checks which chromosome generated an answer bigger or smaller than the average.
     public static void checkAns(int N){
         for(int i=0; i<N; i++){
             if(ans[i] >= avg) {

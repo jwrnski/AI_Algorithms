@@ -19,6 +19,7 @@ public class GeneticOperator {
     public static int position1, position2;
     public static float x1, x2;
 
+    // Rounds up floats to 5 decimal points.
     public static float roundAvoid(float value) {
         float scale = (float) Math.pow(10, d);
         return (float) Math.round(value * scale) / scale;
@@ -33,12 +34,14 @@ public class GeneticOperator {
         return (float) (-Math.pow(x1,2) - Math.pow(x2,2) + 2);
     }
 
+    // Calculates the value of the function.
     public static float calc(){
         x1 = decode(position1);
         x2 = decode(position2);
         return function(x1, x2);
     }
 
+    // Calculates the value of the function from the given chromosome.
     public static float calc(byte[] chromosome){
         getGenotype(chromosome);
         position1 = Integer.parseInt(toString(genotype1), 2);
@@ -48,6 +51,7 @@ public class GeneticOperator {
         return function(x1, x2);
     }
 
+    // Mutates the chromosome with pm probability.
     public static void mutate(float pm){
         float rand;
         for(int i =0; i < mi*2-1; i++){
