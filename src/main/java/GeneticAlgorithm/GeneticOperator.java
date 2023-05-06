@@ -62,10 +62,12 @@ public class GeneticOperator {
 
     // Fills in array with randomly generated 0s and 1s.
     public static byte[] generateChromosome(){
+        byte[] parent = new byte[mi*2];
         for(int i=0; i<mi*2-1; i++)
-            chromosome[i] = (byte)Math.round(Math.random());
-        if(!getGenotype(chromosome)) generateChromosome();
-        return chromosome;
+            parent[i] = (byte)Math.round(Math.random());
+        if(!getGenotype(parent)) generateChromosome();
+        chromosome = parent;
+        return parent;
     }
 
     // A chromosome consists of two genotypes which are essentially our solutions for function.
@@ -102,12 +104,12 @@ public class GeneticOperator {
     }
 
     public static void main(String[] args) {
-        generateChromosome();
+        /*generateChromosome();
         System.out.println(Arrays.toString(chromosome));
         mutate(1);
         System.out.println(Arrays.toString(chromosome));
         System.out.println();
-        /*System.out.println(Arrays.toString(genotype1));
+        System.out.println(Arrays.toString(genotype1));
         System.out.println(position1);
         System.out.println(decode(position1));
         System.out.println(Arrays.toString(genotype2));
@@ -115,5 +117,9 @@ public class GeneticOperator {
         System.out.println(decode(position2));
         System.out.println("f = ");
         calc();*/
+        byte[] parent1 = generateChromosome();
+        byte[] parent2 = generateChromosome();
+        System.out.println(Arrays.toString(parent1));
+        System.out.println(Arrays.toString(parent2));
     }
 }
