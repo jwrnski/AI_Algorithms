@@ -23,7 +23,7 @@ public class Population {
             for(int j=0; j<mi*2-1; j++){
                 population[i][j] = chromosome[j];
             }
-            ans[i] = GeneticOperator.calc(chromosome);
+            //ans[i] = GeneticOperator.calc(chromosome);
             generateChromosome();
         }
         return population;

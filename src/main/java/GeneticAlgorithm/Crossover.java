@@ -35,6 +35,43 @@ public class Crossover {
         checkChildren(child1, child2, 1);
     }
 
+    // Does the two point crossover between cc ( current chromosome )
+    // and randomly generated chromosome from the population.
+    public static byte[][] twoPointCrossPopulation(byte[][] population){
+        byte rows = (byte) population.length;
+        byte columns = (byte) population[0].length;
+        byte crossWith = 0;
+        float crossProbability = 0;
+        byte[][] newPopulation = new byte[rows][columns];
+
+        for(int i = 0; i < rows - 1; i++){
+            byte crossP1 = (byte)Math.round(Math.random() * (18));
+            byte crossP2 = (byte)Math.round(Math.random() * (37 - 18) + 18);
+            while (crossWith == i){
+                crossWith = (byte) Math.round(Math.random() * rows-1);
+            }
+            crossProbability = (float) Math.random();
+            System.out.println(i + " " + crossProbability);
+            if(crossProbability <= 0.6) {
+                for (int j = 0; j < columns - 1; j++)
+                    if (j < crossP1) {
+                        newPopulation[i][j] = population[i][j];
+                        newPopulation[i + 1][j] = population[crossWith][j];
+                    } else if (j > crossP1 && j < crossP2) {
+                        newPopulation[i][j] = population[crossWith][j];
+                        newPopulation[i + 1][j] = population[i][j];
+                    } else if (j > crossP2) {
+                        newPopulation[i][j] = population[i][j];
+                        newPopulation[i + 1][j] = population[crossWith][j];
+                    }
+                }
+            else
+                for (int k = 0; k < columns - 1; k++)
+                    newPopulation[i][k] = population[i][k];
+        }
+        return newPopulation;
+    }
+
     // Generates two crossover points.
     public static void twoPointCrossover(byte[] parent1, byte[] parent2){
         crossPoint1 = (byte)Math.round(Math.random() * (18));
@@ -64,7 +101,6 @@ public class Crossover {
                 case 1 -> onePointCrossover(parent1, parent2);
                 case 2 -> twoPointCrossover(parent1, parent2);
             }
-
     }
 
     public static void main(String[] args) {
