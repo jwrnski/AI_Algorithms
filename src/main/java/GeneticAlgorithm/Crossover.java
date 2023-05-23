@@ -1,6 +1,7 @@
 package GeneticAlgorithm;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Crossover {
 
@@ -40,36 +41,64 @@ public class Crossover {
     public static byte[][] twoPointCrossPopulation(byte[][] population){
         byte rows = (byte) population.length;
         byte columns = (byte) population[0].length;
-        byte crossWith = 0;
+        int crossWith = 0;
         float crossProbability = 0;
         byte[][] newPopulation = new byte[rows][columns];
-
-        for(int i = 0; i < rows - 1; i++){
+        byte[] newChromosome = new byte[columns];
+        for(int i = 0; i < rows; i++){
             byte crossP1 = (byte)Math.round(Math.random() * (18));
             byte crossP2 = (byte)Math.round(Math.random() * (37 - 18) + 18);
-            while (crossWith == i){
-                crossWith = (byte) Math.round(Math.random() * rows-1);
-            }
             crossProbability = (float) Math.random();
-            System.out.println(i + " " + crossProbability);
+            while (crossWith == i){
+                Random random = new Random();
+                crossWith = random.nextInt(5);
+            }
+            System.out.println("i: " + i + " p: " + crossProbability + " cross with: " + crossWith);
             if(crossProbability <= 0.6) {
-                for (int j = 0; j < columns - 1; j++)
+                for (int j = 0; j < columns - 1; j++) {
                     if (j < crossP1) {
-                        newPopulation[i][j] = population[i][j];
-                        newPopulation[i + 1][j] = population[crossWith][j];
+                        newChromosome[i] = population[i][j];
                     } else if (j > crossP1 && j < crossP2) {
-                        newPopulation[i][j] = population[crossWith][j];
-                        newPopulation[i + 1][j] = population[i][j];
+                        newChromosome[i] = population[crossWith][j];
                     } else if (j > crossP2) {
-                        newPopulation[i][j] = population[i][j];
-                        newPopulation[i + 1][j] = population[crossWith][j];
+                        newChromosome[i] = population[i][j];
                     }
                 }
-            else
-                for (int k = 0; k < columns - 1; k++)
-                    newPopulation[i][k] = population[i][k];
+            }
+            else {
+                for(int k=0; k<columns; k++)
+                    newChromosome[k] = population[i][k];
+            }
+            if(checkGenotype(newChromosome)){
+                for (int j = 0; j < columns - 1; j++) {
+                    newPopulation[i][j] = newChromosome[j];
+                }
+            }
+            else{
+                i--;
+            }
         }
         return newPopulation;
+    }
+
+    public static boolean checkGenotype(byte[] chromosome){
+        int len = chromosome.length;
+        int position1, position2;
+        byte[] genotype1 = new byte[len/2];
+        byte[] genotype2 = new byte[len/2];
+        int j = 0;
+        for(int i=0; i<len; i++){
+            if(i < mi)
+                genotype1[i] = chromosome[i];
+            else {
+                genotype2[j] = chromosome[i];
+                j++;
+            }
+        }
+        position1 = Integer.parseInt(GeneticOperator.toString(genotype1), 2);
+        position2 = Integer.parseInt(GeneticOperator.toString(genotype2), 2);
+        System.out.println("pos 1: " + position1 + " pos 2: " + position2);
+        return((position1 <= 400001) && (position2 <= 400001));
     }
 
     // Generates two crossover points.
