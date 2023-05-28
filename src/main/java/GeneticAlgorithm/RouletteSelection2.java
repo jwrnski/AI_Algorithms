@@ -12,7 +12,7 @@ public class RouletteSelection2 {
         int size = fitness.length;
         float fitnessSum = 0;
         float[] percentage = new float[size];
-        // Find the smalles value from the fitness array, get and abs from it and increment it by 1
+        // Find the smallest value from the fitness array, get and abs from it and increment it by 1
         // Increment all values by the inc array (no negative values in the array!)
         float res = fitness[0];
         for (int i = 1; i < size; i++)
@@ -22,6 +22,7 @@ public class RouletteSelection2 {
         //System.out.println("Increment by: " + inc);
         for(int i=0; i < size; i++)
             fitnessSum += fitness[i] + inc;
+        Arrays.sort(fitness);
         for(int i=0; i<size; i++)
             percentage[i] = (fitness[i] + inc) / fitnessSum;
         //System.out.println(Arrays.toString(percentage));
@@ -43,9 +44,9 @@ public class RouletteSelection2 {
                 j++;
             }
             if(j>0)
-                toKeep[i] = (byte) (j-1);
+                toKeep[i] = (j-1);
             else
-                toKeep[i] = (byte) j;
+                toKeep[i] = j;
             added = percentage[0];
             j = 0;
         }
@@ -57,11 +58,20 @@ public class RouletteSelection2 {
         int rows = population.length;
         int columns = population[0].length;
         int[][] newPopulation = new int[rows][columns];
+        float[] checkAns = new float[rows];
+        Arrays.sort(fitness);
         int[] keep = roulette(fitness);
-        for (int i = 0; i < rows; i++) {
-            int rowToCopy = keep[i];
-            System.arraycopy(population[rowToCopy], 0, newPopulation[i], 0, population[rowToCopy].length-1);
+        for(int i = 0; i < rows; i++){
+            checkAns[i] = fitness[keep[i]];
+            if(FitnessEvaluation.calc(population, i) == checkAns[i])
+                for(int j = 0; j < columns; j++)
+                    newPopulation[i][j] = population[i][j];
         }
+
+        // keep = {1, 1, 2, 1, 3}
+        // fitness = {a, b, c, d, e}
+        // checkAns = {a, a, b, a, c}
+
         return newPopulation;
     }
 }

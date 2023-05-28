@@ -16,7 +16,7 @@ public class Population {
     }
 
     // Generates a population of chromosomes. Fills in a two-dimensional array with N amount of chromosomes.
-    public static int[][] generatePopulation(byte N){
+    public static int[][] generatePopulation(int N){
         int[][] population = new int[N][2*mi];
         int[] chromosome = generateChromosome();
         for(int i=0; i<N; i++){
@@ -24,7 +24,7 @@ public class Population {
                 population[i][j] = chromosome[j];
             }
             //ans[i] = GeneticOperator.calc(chromosome);
-            generateChromosome();
+            chromosome = generateChromosome();
         }
         return population;
     }
@@ -58,8 +58,8 @@ public class Population {
     }
 
     public static void main(String[] args) {
-        int[][] population;
-        population = generatePopulation((byte) 5);
+        /*int[][] population;
+        population = generatePopulation(5);
         for(int i = 0; i<5; i++) {
             for (int j = 0; j < mi * 2 - 1; j++) {
                 System.out.print(population[i][j]);
@@ -73,6 +73,6 @@ public class Population {
         System.out.println("avg = \n" + avg);
         checkAns(5);
         System.out.println("Liczba osobników, których wartośc funkcji przystosowania jest większa lub równa: " + amtL);
-        System.out.println("Liczba osobników, których wartośc funkcji przystosowania jest mniejsza: " + amtS);
+        System.out.println("Liczba osobników, których wartośc funkcji przystosowania jest mniejsza: " + amtS);*/
     }
 }

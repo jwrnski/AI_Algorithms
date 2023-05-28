@@ -51,20 +51,40 @@ public class GeneticOperator {
         return function(x1, x2);
     }
 
-    // Mutates the chromosome with pm probability.
-    public static void mutate(float pm){
-        float rand;
-        for(int i =0; i < mi*2-1; i++){
-            rand = (float) Math.random();
-            if(rand < pm) chromosome[i] = (byte) (chromosome[i] == 0 ? 1 : 0);
+    public static int[][] mutatePopulation(int[][] population, float probability){
+        int rows = population.length;
+        int columns = population[0].length;
+        int[] chromosome;
+        int[][] newPopulation = new int[rows][columns];
+        for(int i = 0; i < rows; i++){
+            chromosome = Crossover2D.copy(population, i);
+            chromosome = mutate(chromosome, probability);
+            while(!Crossover2D.checkChromosome(chromosome)) chromosome = mutate(chromosome, probability);
+            for (int j = 0; j < columns; j++) {
+                newPopulation[i][j] = chromosome[j];
+            }
         }
+        return newPopulation;
+    }
+
+    // Mutates the chromosome with pm probability.
+    public static int[] mutate(int[] chromosome, float probability){
+        int columns = chromosome.length;
+        int[] newChromosome = new int[columns];
+        float rand;
+        for(int j = 0; j < columns; j++){
+            rand = (float) Math.random();
+            if(rand < probability)
+                newChromosome[j] = (chromosome[j] == 0 ? 1 : 0);
+        }
+        return newChromosome;
     }
 
     // Fills in array with randomly generated 0s and 1s.
     public static int[] generateChromosome(){
         int[] parent = new int[mi*2];
         for(int i=0; i<mi*2-1; i++)
-            parent[i] = (byte)Math.round(Math.random());
+            parent[i] = (int) Math.round(Math.random());
         if(!getGenotype(parent)) generateChromosome();
         chromosome = parent;
         return parent;

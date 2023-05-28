@@ -6,7 +6,7 @@ public class Crossover2D {
 
     // Copies a chromosome from population to a separate byte[] array
     public static int[] copy(int[][] toCopy, int row){
-        byte columns = (byte) toCopy[0].length;
+        int columns = toCopy[0].length;
         int[] copied = new int[columns];
         for(int k=0; k<columns; k++)
             copied[k] = toCopy[row][k];
@@ -17,8 +17,8 @@ public class Crossover2D {
     // Chance of crossover for current chromosome is crossProbability (60%)
     // Cannot cross with itself
     public static int[][] mixPopulation(int[][] population){
-        byte rows = (byte) population.length;
-        byte columns = (byte) population[0].length;
+        int rows = population.length;
+        int columns = population[0].length;
         float crossProbability = 0;
         int[][] newPopulation = new int[rows][columns];
         int[] newChromosome;
@@ -48,10 +48,10 @@ public class Crossover2D {
 
     // Generate two random points in the chromosome for the crossover to occur
     public static int[] crossover(int[][] population, int row, int crossWith){
-        byte crossP1 = (byte)Math.round(Math.random() * 38);
-        byte crossP2 = (byte)Math.round(Math.random() * 38);
-        byte lower;
-        byte upper;
+        int crossP1 = (int) Math.round(Math.random() * 38);
+        int crossP2 = (int) Math.round(Math.random() * 38);
+        int lower;
+        int upper;
         if(crossP1 > crossP2){
             lower = crossP2;
             upper = crossP1;
@@ -60,7 +60,7 @@ public class Crossover2D {
             lower = crossP1;
             upper = crossP2;
         }
-        byte columns = (byte) population[0].length;
+        int columns = population[0].length;
         int[] newChromosome = new int[columns];
         for(int i = 0; i < columns - 1; i++){
             if(i < lower){

@@ -20,19 +20,20 @@ public class Evaluate {
     // repeat until end of evaluation steps (ev)
 
     public static void eval(int N, int ev){
-        int[][] population = Population.generatePopulation((byte) N);
+        int[][] population = Population.generatePopulation(N);
         float[] ans = FitnessEvaluation.getAns(population);
-        System.out.println(Arrays.toString(ans));
+        //System.out.println(Arrays.toString(ans));
         System.out.println("current_best: " + FitnessEvaluation.getMax(ans));
         for(int i = 0; i<ev; i++){
             population = RouletteSelection2.createNewPopulation(population, ans);
             population = Crossover2D.mixPopulation(population);
+            population = GeneticOperator.mutatePopulation(population, pc);
             ans = FitnessEvaluation.getAns(population);
-            System.out.println("current_best: " + FitnessEvaluation.getMax(ans));
+            System.out.println(FitnessEvaluation.getMax(ans));
         }
     }
 
-    public static void printPopulation(byte[][] population){
+    public static void printPopulation(int[][] population){
         int rows = population.length;
         int columns = population[0].length;
         for(int i = 0; i<rows; i++) {
@@ -44,6 +45,6 @@ public class Evaluate {
     }
 
     public static void main(String[] args) {
-        eval(129, 10000);
+        eval(200, 1000);
     }
 }
