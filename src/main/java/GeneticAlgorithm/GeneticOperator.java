@@ -13,9 +13,9 @@ public class GeneticOperator {
     */
     public static float ai = -2, bi = 2, d = 5, pm;
     public static int mi = (int)Math.ceil((Math.log((bi - ai) * Math.pow(10, d)) / Math.log(2)));
-    public static byte[] chromosome = new byte[mi*2];
-    public static byte[] genotype1 = new byte[mi];
-    public static byte[] genotype2 = new byte[mi];
+    public static int[] chromosome = new int[mi*2];
+    public static int[] genotype1 = new int[mi];
+    public static int[] genotype2 = new int[mi];
     public static int position1, position2;
     public static float x1, x2;
 
@@ -42,7 +42,7 @@ public class GeneticOperator {
     }
 
     // Calculates the value of the function from the given chromosome.
-    public static float calc(byte[] chromosome){
+    public static float calc(int[] chromosome){
         getGenotype(chromosome);
         position1 = Integer.parseInt(toString(genotype1), 2);
         position2 = Integer.parseInt(toString(genotype2), 2);
@@ -61,8 +61,8 @@ public class GeneticOperator {
     }
 
     // Fills in array with randomly generated 0s and 1s.
-    public static byte[] generateChromosome(){
-        byte[] parent = new byte[mi*2];
+    public static int[] generateChromosome(){
+        int[] parent = new int[mi*2];
         for(int i=0; i<mi*2-1; i++)
             parent[i] = (byte)Math.round(Math.random());
         if(!getGenotype(parent)) generateChromosome();
@@ -71,7 +71,7 @@ public class GeneticOperator {
     }
 
     // A chromosome consists of two genotypes which are essentially our solutions for function.
-    public static boolean getGenotype(byte[] chromosome){
+    public static boolean getGenotype(int[] chromosome){
         int j = 0;
         for(int i=0; i<mi*2-1; i++){
             if(i < mi)
@@ -85,21 +85,23 @@ public class GeneticOperator {
     }
 
     // Check if the genotypes are correct.
-    public static boolean checkGenotype(byte[] genotype1, byte[] genotype2){
+    public static boolean checkGenotype(int[] genotype1, int[] genotype2){
         position1 = Integer.parseInt(toString(genotype1), 2);
         position2 = Integer.parseInt(toString(genotype2), 2);
         return ((position1 <= 400001) && (position2 <= 400001));
     }
 
-    public static boolean checkGenotype(byte[] genotype){
+    public static boolean checkGenotype(int[] genotype){
         position1 = Integer.parseInt(toString(genotype), 2);
         return position1 <= 400001;
     }
 
     // Convert our array with chromosome into String in order to convert binary value into decimal value.
-    public static String toString(byte[] vector){
+    public static String toString(int[] vector){
         StringBuilder bin = new StringBuilder();
-        for (byte b : vector) bin.append(b);
+        for (int b : vector) {
+            bin.append(b);
+        }
         return bin.toString();
     }
 
@@ -117,8 +119,8 @@ public class GeneticOperator {
         System.out.println(decode(position2));
         System.out.println("f = ");
         calc();*/
-        byte[] parent1 = generateChromosome();
-        byte[] parent2 = generateChromosome();
+        int[] parent1 = generateChromosome();
+        int[] parent2 = generateChromosome();
         System.out.println(Arrays.toString(parent1));
         System.out.println(Arrays.toString(parent2));
     }

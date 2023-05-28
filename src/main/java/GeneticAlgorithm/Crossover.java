@@ -7,10 +7,10 @@ public class Crossover {
 
     public static float ai = -2, bi = 2, d = 5;
     public static int mi = (int)Math.ceil((Math.log((bi - ai) * Math.pow(10, d)) / Math.log(2)));
-    public static byte[] parent1 = new byte[2*mi];
-    public static byte[] parent2 = new byte[2*mi];
-    public static byte[] child1 = new byte[2*mi];
-    public static byte[] child2 = new byte[2*mi];
+    public static int[] parent1 = new int[2*mi];
+    public static int[] parent2 = new int[2*mi];
+    public static int[] child1 = new int[2*mi];
+    public static int[] child2 = new int[2*mi];
     public static byte crossPoint1, crossPoint2;
 
 
@@ -20,7 +20,7 @@ public class Crossover {
     }
 
     // Randomly generates a point where two parents will cross their genes and create two children.
-    public static void onePointCrossover(byte[] parent1, byte[] parent2){
+    public static void onePointCrossover(int[] parent1, int[] parent2){
         crossPoint1 = (byte)Math.round(Math.random() * (37));
         System.out.println("Crossover point: " + crossPoint1);
         for(int i=0; i<parent1.length-1; i++){
@@ -38,16 +38,14 @@ public class Crossover {
 
     // Does the two point crossover between cc ( current chromosome )
     // and randomly generated chromosome from the population.
-    public static byte[][] twoPointCrossPopulation(byte[][] population){
+    public static int[][] twoPointCrossPopulation(int[][] population){
         byte rows = (byte) population.length;
         byte columns = (byte) population[0].length;
         int crossWith = 0;
         float crossProbability = 0;
-        byte[][] newPopulation = new byte[rows][columns];
-        byte[] newChromosome = new byte[columns];
+        int[][] newPopulation = new int[rows][columns];
+        int[] newChromosome = new int[columns];
         for(int i = 0; i < rows; i++){
-            byte crossP1 = (byte)Math.round(Math.random() * (18));
-            byte crossP2 = (byte)Math.round(Math.random() * (37 - 18) + 18);
             crossProbability = (float) Math.random();
             while (crossWith == i){
                 Random random = new Random();
@@ -55,19 +53,10 @@ public class Crossover {
             }
             System.out.println("i: " + i + " p: " + crossProbability + " cross with: " + crossWith);
             if(crossProbability <= 0.6) {
-                for (int j = 0; j < columns - 1; j++) {
-                    if (j < crossP1) {
-                        newChromosome[i] = population[i][j];
-                    } else if (j > crossP1 && j < crossP2) {
-                        newChromosome[i] = population[crossWith][j];
-                    } else if (j > crossP2) {
-                        newChromosome[i] = population[i][j];
-                    }
-                }
+              newChromosome = crossover(population, crossWith, i);
             }
             else {
-                for(int k=0; k<columns; k++)
-                    newChromosome[k] = population[i][k];
+                newChromosome = copy(population, i);
             }
             if(checkGenotype(newChromosome)){
                 for (int j = 0; j < columns - 1; j++) {
@@ -75,17 +64,45 @@ public class Crossover {
                 }
             }
             else{
-                i--;
+                crossover(population, crossWith, i);
             }
         }
         return newPopulation;
     }
 
-    public static boolean checkGenotype(byte[] chromosome){
+    // Copies a chromosome from population to a separate byte[] array
+    public static int[] copy(int[][] toCopy, int row){
+        byte columns = (byte) toCopy[0].length;
+        int[] copied = new int[columns];
+        for(int k=0; k<columns; k++)
+            copied[k] = toCopy[row][k];
+        return copied;
+    }
+
+    public static int[] crossover(int[][] population, int crossWith, int rewrite){
+        byte crossP1 = (byte)Math.round(Math.random() * (18));
+        byte crossP2 = (byte)Math.round(Math.random() * (37 - 18) + 18);
+        byte rows = (byte) population.length;
+        byte columns = (byte) population[0].length;
+        int[] newChromosome = new int[columns];
+        for (int i = 0; i < columns - 1; i++) {
+            if (i < crossP1) {
+                newChromosome[i] = population[rewrite][i];
+            } else if (i > crossP1 && i < crossP2) {
+                newChromosome[i] = population[crossWith][i];
+            } else if (i > crossP2) {
+                newChromosome[i] = population[rewrite][i];
+            }
+        }
+        return newChromosome;
+    }
+
+
+    public static boolean checkGenotype(int[] chromosome){
         int len = chromosome.length;
         int position1, position2;
-        byte[] genotype1 = new byte[len/2];
-        byte[] genotype2 = new byte[len/2];
+        int[] genotype1 = new int[len/2];
+        int[] genotype2 = new int[len/2];
         int j = 0;
         for(int i=0; i<len; i++){
             if(i < mi)
@@ -97,12 +114,12 @@ public class Crossover {
         }
         position1 = Integer.parseInt(GeneticOperator.toString(genotype1), 2);
         position2 = Integer.parseInt(GeneticOperator.toString(genotype2), 2);
-        System.out.println("pos 1: " + position1 + " pos 2: " + position2);
+        //System.out.println("pos 1: " + position1 + " pos 2: " + position2);
         return((position1 <= 400001) && (position2 <= 400001));
     }
 
     // Generates two crossover points.
-    public static void twoPointCrossover(byte[] parent1, byte[] parent2){
+    public static void twoPointCrossover(int[] parent1, int[] parent2){
         crossPoint1 = (byte)Math.round(Math.random() * (18));
         crossPoint2 = (byte)Math.round(Math.random() * (37 - 18) + 18);
         System.out.println("Crossover points: " + crossPoint1 + ", " + crossPoint2);
@@ -124,7 +141,7 @@ public class Crossover {
     }
 
     // Checks if either of children are correct if not do the crossover again until they are correct.
-    public static void checkChildren(byte[] child1, byte[] child2, int option){
+    public static void checkChildren(int[] child1, int[] child2, int option){
         if(!(GeneticOperator.getGenotype(child1) || GeneticOperator.getGenotype(child2)))
             switch (option){
                 case 1 -> onePointCrossover(parent1, parent2);

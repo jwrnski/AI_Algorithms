@@ -6,7 +6,7 @@ public class RouletteSelection {
 
     public static float ai = -2, bi = 2, d = 5, pm, avg, amtL=0, amtS=0;
     public static int mi = (int)Math.ceil((Math.log((bi - ai) * Math.pow(10, d)) / Math.log(2)));
-    public static byte[][] p1 = Population.generatePopulation((byte) 5);
+    public static int[][] p1 = Population.generatePopulation((byte) 5);
     public static float fitnessSum = 0;
     public static float[] fitnessVal = Population.ans;
 
@@ -45,7 +45,7 @@ public class RouletteSelection {
     }
 
     public static void roulette(float[] percentVal){
-        byte[] keep = new byte[percentVal.length];
+        int[] keep = new int[percentVal.length];
         float temp = percentVal[0];
         float rand = 0;
         byte j = 0;
@@ -68,16 +68,16 @@ public class RouletteSelection {
         newPopulation(keep);
     }
 
-    public static void newPopulation(byte[] keep){
+    public static void newPopulation(int[] keep){
         byte size = (byte) keep.length;
         float[] fitnessP2 = new float[size];
-        byte[][] p2 = new byte[size][2*mi-1];
+        int[][] p2 = new int[size][2*mi-1];
         for (int i = 0; i < size; i++) {
             int rowToCopy = keep[i];
             System.arraycopy(p1[rowToCopy], 0, p2[i], 0, p1[rowToCopy].length-1);
         }
         int i=0;
-        for (byte[] row : p2) {
+        for (int[] row : p2) {
             fitnessP2[i] = GeneticOperator.calc(row);
             for (int element : row) {
                 System.out.print(element);

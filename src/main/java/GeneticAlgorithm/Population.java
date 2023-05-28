@@ -7,18 +7,18 @@ public class Population {
     public static float ai = -2, bi = 2, d = 5, pm, avg, amtL=0, amtS=0;
     public static int mi = (int)Math.ceil((Math.log((bi - ai) * Math.pow(10, d)) / Math.log(2)));
     public static int position;
-    public static byte[] chromosome = new byte[mi*2];
+    public static int[] chromosome = new int[mi*2];
     public static float[] ans = new float[5];
 
     // Generates a chromosome with correct genotypes.
-    public static void generateChromosome(){
-        chromosome = GeneticOperator.generateChromosome();
+    public static int[] generateChromosome(){
+        return GeneticOperator.generateChromosome();
     }
 
     // Generates a population of chromosomes. Fills in a two-dimensional array with N amount of chromosomes.
-    public static byte[][] generatePopulation(byte N){
-        byte[][] population = new byte[N][2*mi];
-        generateChromosome();
+    public static int[][] generatePopulation(byte N){
+        int[][] population = new int[N][2*mi];
+        int[] chromosome = generateChromosome();
         for(int i=0; i<N; i++){
             for(int j=0; j<mi*2-1; j++){
                 population[i][j] = chromosome[j];
@@ -58,7 +58,7 @@ public class Population {
     }
 
     public static void main(String[] args) {
-        byte[][] population;
+        int[][] population;
         population = generatePopulation((byte) 5);
         for(int i = 0; i<5; i++) {
             for (int j = 0; j < mi * 2 - 1; j++) {
