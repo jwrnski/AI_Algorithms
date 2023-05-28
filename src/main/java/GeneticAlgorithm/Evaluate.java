@@ -22,8 +22,7 @@ public class Evaluate {
     public static void eval(int N, int ev){
         int[][] population = Population.generatePopulation(N);
         float[] ans = FitnessEvaluation.getAns(population);
-        //System.out.println(Arrays.toString(ans));
-        System.out.println("current_best: " + FitnessEvaluation.getMax(ans));
+        System.out.println(FitnessEvaluation.getMax(ans));
         for(int i = 0; i<ev; i++){
             population = RouletteSelection2.createNewPopulation(population, ans);
             population = Crossover2D.mixPopulation(population);
@@ -45,6 +44,6 @@ public class Evaluate {
     }
 
     public static void main(String[] args) {
-        eval(200, 1000);
+        eval(5, 10000);
     }
 }

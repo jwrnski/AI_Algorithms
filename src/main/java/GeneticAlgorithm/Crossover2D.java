@@ -26,8 +26,8 @@ public class Crossover2D {
         Random random = new Random();
         for(int i = 0; i< rows; i++){
             crossProbability = (float) Math.random();
-            crossWith = random.nextInt(6);
-            while(crossWith == i) crossWith = random.nextInt(6);
+            crossWith = random.nextInt(rows);
+            while(crossWith == i) crossWith = random.nextInt(rows);
             if(crossProbability <= 0.6) {
                 //System.out.println("i " + i + "with " + crossWith);
                 newChromosome = crossover(population, i, crossWith);
