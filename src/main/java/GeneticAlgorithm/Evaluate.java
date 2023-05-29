@@ -1,6 +1,7 @@
 package GeneticAlgorithm;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Evaluate {
 
@@ -22,13 +23,15 @@ public class Evaluate {
     public static void eval(int N, int ev){
         int[][] population = Population.generatePopulation(N);
         float[] ans = FitnessEvaluation.getAns(population);
-        System.out.println(FitnessEvaluation.getMax(ans));
+        //System.out.println(FitnessEvaluation.getMax(ans));
+        //System.out.println(Arrays.toString(ans));
         for(int i = 0; i<ev; i++){
             population = RouletteSelection2.createNewPopulation(population, ans);
             population = Crossover2D.mixPopulation(population);
             population = GeneticOperator.mutatePopulation(population, pc);
             ans = FitnessEvaluation.getAns(population);
-            System.out.println(FitnessEvaluation.getMax(ans));
+            //System.out.println(Arrays.toString(ans));
+            //System.out.println(FitnessEvaluation.getMax(ans));
         }
     }
 
@@ -44,6 +47,6 @@ public class Evaluate {
     }
 
     public static void main(String[] args) {
-        eval(5, 10000);
+        eval(5, 100);
     }
 }

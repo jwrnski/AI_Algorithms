@@ -20,52 +20,74 @@ public class RouletteSelection2 {
         float min = res;
         float inc = Math.abs(min) + 1;
         //System.out.println("Increment by: " + inc);
-        for(int i=0; i < size; i++)
-            fitnessSum += fitness[i] + inc;
         Arrays.sort(fitness);
-        for(int i=0; i<size; i++)
+        //System.out.println(Arrays.toString(fitness));
+        for(int i=0; i < size; i++) {
+            fitnessSum += fitness[i] + inc;
+            //fitness[i] += inc;
+        }
+        //System.out.println(Arrays.toString(fitness));
+        /*for(int i = 0; i < size; i++){
+            fitness[i] = (float) Math.pow(fitness[i], 2);
+        }*/
+        //System.out.println(Arrays.toString(fitness));
+        for(int i=0; i<size; i++) {
             percentage[i] = (fitness[i] + inc) / fitnessSum;
+        }
         //System.out.println(Arrays.toString(percentage));
         return percentage;
     }
 
     public static int[] roulette(float[] fitnessArray){
         float[] percentage = setRoulette(fitnessArray);
-        int len = fitnessArray.length;
-        int[] toKeep = new int[len];
+        int rows = fitnessArray.length;
+        int[] toKeep = new int[rows];
         float added = percentage[0];
         float random;
-        int j = 0;
-        for(int i = 0; i < len; i++){
+        int k = 0, j = 1;
+        for(int i = 0; i < rows; i++){
             random = (float) Math.random();
             //System.out.println("random: " + random);
             while(added < random){
                 added += percentage[j];
+                k++;
                 j++;
+                //System.out.println(added + "\t" + k);
             }
-            if(j>0)
-                toKeep[i] = (j-1);
-            else
-                toKeep[i] = j;
+            //System.out.println(added);
+            toKeep[i] = k;
+            k = 0;
+            j = 1;
             added = percentage[0];
-            j = 0;
         }
         //System.out.println("\nChromosomes to keep:" + Arrays.toString(toKeep));
         return toKeep;
+    }
+
+    public static float[] pickedFitness(int[] keep, float[] fitness){
+        int size = fitness.length;
+        float[] keepThese = new float[size];
+        for(int i = 0; i<size; i++){
+            int index = keep[i];
+            keepThese[i] = fitness[index];
+        }
+        return keepThese;
     }
 
     public static int[][] createNewPopulation(int[][] population, float[] fitness){
         int rows = population.length;
         int columns = population[0].length;
         int[][] newPopulation = new int[rows][columns];
-        float[] checkAns = new float[rows];
         Arrays.sort(fitness);
         int[] keep = roulette(fitness);
+        float[] keepThese = pickedFitness(keep, fitness);
+        //System.out.println(Arrays.toString(keepThese));
         for(int i = 0; i < rows; i++){
-            checkAns[i] = fitness[keep[i]];
-            if(FitnessEvaluation.calc(population, i) == checkAns[i])
-                for(int j = 0; j < columns; j++)
+            if(FitnessEvaluation.calc(population, i) == keepThese[i]) {
+                //System.out.println(FitnessEvaluation.calc(population, i));
+                for (int j = 0; j < columns; j++)
                     newPopulation[i][j] = population[i][j];
+            }
         }
 
         // keep = {1, 1, 2, 1, 3}

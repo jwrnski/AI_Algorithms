@@ -37,6 +37,7 @@ public class FitnessEvaluation {
         int position2 = Integer.parseInt(GeneticOperator.toString(genotype2), 2);
         float x1 = GeneticOperator.decode(position1);
         float x2 = GeneticOperator.decode(position2);
+        //System.out.println(x1 + "\t" + x2);
         ans = GeneticOperator.function(x1, x2);
         return ans;
     }
