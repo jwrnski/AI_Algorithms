@@ -18,13 +18,13 @@ public class Population {
     // Generates a population of chromosomes. Fills in a two-dimensional array with N amount of chromosomes.
     public static int[][] generatePopulation(int N){
         int[][] population = new int[N][2*mi];
-        int[] chromosome = generateChromosome();
+        int[] chromosome = new int[2*mi];
         for(int i=0; i<N; i++){
+            chromosome = generateChromosome();
+            while(!GeneticOperator.getGenotype(chromosome)) chromosome = generateChromosome();
             for(int j=0; j<mi*2-1; j++){
                 population[i][j] = chromosome[j];
             }
-            //ans[i] = GeneticOperator.calc(chromosome);
-            chromosome = generateChromosome();
         }
         return population;
     }

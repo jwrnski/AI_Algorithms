@@ -10,7 +10,7 @@ public class Evaluate {
     * pc - probability for crossover
     */
     public static int ev = 1000;
-    public static float pc = 0.6F;
+    public static double pc = 0.02;
 
     // generate population
     // calculate fitness values for each chromosome
@@ -23,16 +23,24 @@ public class Evaluate {
     public static void eval(int N, int ev){
         int[][] population = Population.generatePopulation(N);
         float[] ans = FitnessEvaluation.getAns(population);
+        float[] deltaEv = new float[ev/50+1];
+        int c = 0;
         //System.out.println(FitnessEvaluation.getMax(ans));
-        //System.out.println(Arrays.toString(ans));
-        for(int i = 0; i<ev; i++){
+        deltaEv[c] = FitnessEvaluation.getMax(ans);
+        c++;
+        for(int i = 0; i<ev; i++) {
             population = RouletteSelection2.createNewPopulation(population, ans);
             population = Crossover2D.mixPopulation(population);
             population = GeneticOperator.mutatePopulation(population, pc);
             ans = FitnessEvaluation.getAns(population);
-            //System.out.println(Arrays.toString(ans));
+            if(i % 50 == 0){
+                deltaEv[c] = FitnessEvaluation.getMax(ans);
+                c++;
+            }
             //System.out.println(FitnessEvaluation.getMax(ans));
         }
+        for(int i = 0; i<ev/50+1; i++)
+            System.out.println(deltaEv[i]);
     }
 
     public static void printPopulation(int[][] population){
@@ -47,6 +55,6 @@ public class Evaluate {
     }
 
     public static void main(String[] args) {
-        eval(5, 100);
+        eval(200, 1000);
     }
 }

@@ -51,33 +51,35 @@ public class GeneticOperator {
         return function(x1, x2);
     }
 
-    public static int[][] mutatePopulation(int[][] population, float probability){
+    public static int[][] mutatePopulation(int[][] population, double probability){
         int rows = population.length;
         int columns = population[0].length;
-        int[] chromosome;
         int[][] newPopulation = new int[rows][columns];
+        int[] newChromosome = new int[columns];
+        int[] mutated = new int[columns];
         for(int i = 0; i < rows; i++){
-            chromosome = Crossover2D.copy(population, i);
-            chromosome = mutate(chromosome, probability);
-            while(!Crossover2D.checkChromosome(chromosome)) chromosome = mutate(chromosome, probability);
-            for (int j = 0; j < columns; j++) {
-                newPopulation[i][j] = chromosome[j];
+            newChromosome = Crossover2D.copy(population, i);
+            mutated = mutate(newChromosome, probability);
+            while(!getGenotype(mutated)) mutated = mutate(newChromosome, probability);
+            for(int j = 0; j < columns; j++){
+                newPopulation[i][j] = mutated[j];
             }
         }
         return newPopulation;
     }
 
-    // Mutates the chromosome with pm probability.
-    public static int[] mutate(int[] chromosome, float probability){
-        int columns = chromosome.length;
-        int[] newChromosome = new int[columns];
-        float rand;
-        for(int j = 0; j < columns; j++){
-            rand = (float) Math.random();
-            if(rand < probability)
-                newChromosome[j] = (chromosome[j] == 0 ? 1 : 0);
+    public static int[] mutate(int[] chromosome, double probability){
+        int size = chromosome.length;
+        int[] mutated = new int[size];
+        double random;
+        for(int j = 0; j < size; j++){
+            random = Math.random();
+            if(random < probability)
+                mutated[j] = 1 - chromosome[j];
+            else
+                mutated[j] = chromosome[j];
         }
-        return newChromosome;
+        return mutated;
     }
 
     // Fills in array with randomly generated 0s and 1s.
@@ -85,15 +87,16 @@ public class GeneticOperator {
         int[] parent = new int[mi*2];
         for(int i=0; i<mi*2-1; i++)
             parent[i] = (int) Math.round(Math.random());
-        if(!getGenotype(parent)) generateChromosome();
         chromosome = parent;
         return parent;
     }
 
     // A chromosome consists of two genotypes which are essentially our solutions for function.
     public static boolean getGenotype(int[] chromosome){
+        int [] genotype1 = new int[chromosome.length/2];
+        int [] genotype2 = new int[chromosome.length/2];
         int j = 0;
-        for(int i=0; i<mi*2-1; i++){
+        for(int i=0; i<mi*2; i++){
             if(i < mi)
                 genotype1[i] = chromosome[i];
             else {
@@ -101,7 +104,10 @@ public class GeneticOperator {
                 j++;
             }
         }
-        return checkGenotype(genotype1, genotype2);
+        position1 = Integer.parseInt(toString(genotype1), 2);
+        position2 = Integer.parseInt(toString(genotype2), 2);
+        //System.out.println(position1 + "\t" + position2);
+        return ((position1 <= 400001) && (position2 <= 400001));
     }
 
     // Check if the genotypes are correct.
