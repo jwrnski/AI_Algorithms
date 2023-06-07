@@ -24,7 +24,7 @@ public class Evaluate {
     // repeat until end of evaluation steps (ev)
 
     public static void writeToFileCurrentBest(float[] values, int number){
-        String fileName = "r_p20_2x\\p20_e10k_" +  number + ".txt";
+        String fileName = "p50_2x\\current_best\\p50_currentBest_" +  number + ".txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (float val : values) {
                 writer.write(String.valueOf(val));
@@ -36,7 +36,7 @@ public class Evaluate {
         }
     }
     public static void writeToFileGlobalBest(float[] values, int number){
-        String fileName = "r_p20_2x\\p20_e10k_" +  number + ".txt";
+        String fileName = "p50_2x\\global_best\\p50_global_Best" +  number + ".txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (float val : values) {
                 writer.write(String.valueOf(val));
@@ -48,7 +48,7 @@ public class Evaluate {
         }
     }
     public static void writeToFileAvg(float[] values, int number){
-        String fileName = "r_p20_2x\\p20_e10k_" +  number + ".txt";
+        String fileName = "p50_2x\\average\\p50_avg_" +  number + ".txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (float val : values) {
                 writer.write(String.valueOf(val));
@@ -65,10 +65,13 @@ public class Evaluate {
         float[] ans = FitnessEvaluation.getAns(population);
         float[] deltaEv = new float[ev+1];
         float[] avg_ev = new float[ev+1];
-        float globalBest;
+        float[] globalBest = new float[ev+1];
+        float currentMin = FitnessEvaluation.getMin(ans);
+        float globalMin = currentMin;
         int c = 1;
         deltaEv[0] = FitnessEvaluation.getMin(ans);
         avg_ev[0] = FitnessEvaluation.avg(ans);
+        globalBest[0] = currentMin;
         for(int i = 0; i<ev; i++) {
             population = RouletteSelection2.createNewPopulation(population, ans);
             population = Crossover2D.mixPopulation(population);
@@ -76,11 +79,19 @@ public class Evaluate {
             ans = FitnessEvaluation.getAns(population);
             deltaEv[c] = FitnessEvaluation.getMin(ans);
             avg_ev[c] = FitnessEvaluation.avg(ans);
+            currentMin = FitnessEvaluation.getMin(ans);
+            if(currentMin < globalMin){
+                globalBest[c] = currentMin;
+                globalMin = currentMin;
+            }
+            else
+                globalBest[c] = globalMin;
             c++;
+            //System.out.println(Arrays.toString(ans));
         }
         writeToFileCurrentBest(deltaEv, j);
         writeToFileAvg(avg_ev, j);
-        //writeToFileGlobalBest();
+        writeToFileGlobalBest(globalBest, j);
     }
 
     public static void printPopulation(int[][] population){
@@ -95,8 +106,8 @@ public class Evaluate {
     }
 
     public static void main(String[] args) {
-        for(int i = 0; i < 10; i++) {
-            eval(20, 10000, i);
+        for(int i = 0; i < 30; i++) {
+            eval(50, 10000, i);
         }
     }
 }
