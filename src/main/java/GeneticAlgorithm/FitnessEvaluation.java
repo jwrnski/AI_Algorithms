@@ -11,11 +11,26 @@ public class FitnessEvaluation {
         return ans;
     }
 
+    public static float getMin(float[] fitness){
+        float minValue = fitness[0];
+        for(int i = 1; i < fitness.length; i++)
+            if(fitness[i] < minValue) minValue = fitness[i];
+        return minValue;
+    }
+
     public static float getMax(float[] fitness){
         float maxValue = fitness[0];
         for(int i = 1; i < fitness.length; i++)
             if(fitness[i] > maxValue) maxValue = fitness[i];
         return maxValue;
+    }
+
+    public static float avg(float[] fit){
+        float sum = 0;
+        int len = fit.length;
+        for(float i : fit)
+            sum += i;
+        return sum/len;
     }
 
     public static float calc(int[][]population, int row){
@@ -39,7 +54,8 @@ public class FitnessEvaluation {
         float x1 = GeneticOperator.decode(position1);
         float x2 = GeneticOperator.decode(position2);
         //System.out.println(x1 + "\t" + x2);
-        ans = GeneticOperator.function(x1, x2);
+        //ans = GeneticOperator.function(x1, x2);
+        ans = Functions.rosenbrock(x1, x2);
         return ans;
     }
 }

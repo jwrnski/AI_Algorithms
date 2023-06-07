@@ -2,7 +2,7 @@ package GeneticAlgorithm;
 
 import java.util.Arrays;
 
-public class RouletteSelection {
+/*public class RouletteSelection {
 
     public static float ai = -2, bi = 2, d = 5, pm, avg, amtL=0, amtS=0;
     public static int mi = (int)Math.ceil((Math.log((bi - ai) * Math.pow(10, d)) / Math.log(2)));
@@ -113,4 +113,4 @@ public class RouletteSelection {
         roulette(percent);
     }
 
-}
+}*/

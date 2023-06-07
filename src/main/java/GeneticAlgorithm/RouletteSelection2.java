@@ -51,9 +51,32 @@ public class RouletteSelection2 {
         System.out.println(test);*/
         return percent;
     }
+    public static double[] setRouletteMin(float[] fitness){
+        int size = fitness.length;
+        double min = getMin(fitness);
+        double inc = Math.abs(min) + 1;
+        double[] increment = new double[size];
+        double[] percent = new double[size];
+        double sum = 0, test = 0;
+        for (int i = 0; i < size; i++) {
+            increment[i] = 1 / (fitness[i] + inc);
+            increment[i] = Math.pow(increment[i], 5);
+            sum += increment[i];
+        }
+        for (int i = 0; i < size; i++) {
+            percent[i] = increment[i] / sum;
+        }
+       /* for(int i = 0; i < size; i++){
+            test += percent[i];
+        }
+        System.out.println("Fitness:\n" + Arrays.toString(fitness));
+        System.out.println("Percentage:\n" + Arrays.toString(percent));
+        System.out.println(test);*/
+        return percent;
+    }
 
     public static int[] roulette(float[] fitnessArray) {
-        double[] chance = setRoulette(fitnessArray);
+        double[] chance = setRouletteMin(fitnessArray);
         int rows = fitnessArray.length;
         int[] toKeep = new int[rows];
         double added = 0;

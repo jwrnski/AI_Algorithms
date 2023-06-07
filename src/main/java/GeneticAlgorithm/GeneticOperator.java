@@ -35,21 +35,21 @@ public class GeneticOperator {
     }
 
     // Calculates the value of the function.
-    public static float calc(){
+   /* public static float calc(){
         x1 = decode(position1);
         x2 = decode(position2);
         return function(x1, x2);
-    }
+    }*/
 
     // Calculates the value of the function from the given chromosome.
-    public static float calc(int[] chromosome){
+   /* public static float calc(int[] chromosome){
         getGenotype(chromosome);
         position1 = Integer.parseInt(toString(genotype1), 2);
         position2 = Integer.parseInt(toString(genotype2), 2);
         x1 = decode(position1);
         x2 = decode(position2);
         return function(x1, x2);
-    }
+    }*/
 
     public static int[][] mutatePopulation(int[][] population, double probability){
         int rows = population.length;

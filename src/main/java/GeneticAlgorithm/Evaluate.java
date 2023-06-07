@@ -1,5 +1,8 @@
 package GeneticAlgorithm;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -20,27 +23,64 @@ public class Evaluate {
     // calculate fitness values again for new population
     // repeat until end of evaluation steps (ev)
 
-    public static void eval(int N, int ev){
+    public static void writeToFileCurrentBest(float[] values, int number){
+        String fileName = "r_p20_2x\\p20_e10k_" +  number + ".txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (float val : values) {
+                writer.write(String.valueOf(val));
+                writer.newLine(); // Add a new line after each number
+            }
+            System.out.println("Numbers have been written to the file.");
+        } catch (IOException e) {
+            System.err.println("Error writing to the file: " + e.getMessage());
+        }
+    }
+    public static void writeToFileGlobalBest(float[] values, int number){
+        String fileName = "r_p20_2x\\p20_e10k_" +  number + ".txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (float val : values) {
+                writer.write(String.valueOf(val));
+                writer.newLine(); // Add a new line after each number
+            }
+            System.out.println("Numbers have been written to the file.");
+        } catch (IOException e) {
+            System.err.println("Error writing to the file: " + e.getMessage());
+        }
+    }
+    public static void writeToFileAvg(float[] values, int number){
+        String fileName = "r_p20_2x\\p20_e10k_" +  number + ".txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (float val : values) {
+                writer.write(String.valueOf(val));
+                writer.newLine(); // Add a new line after each number
+            }
+            System.out.println("Numbers have been written to the file.");
+        } catch (IOException e) {
+            System.err.println("Error writing to the file: " + e.getMessage());
+        }
+    }
+
+    public static void eval(int N, int ev, int j){
         int[][] population = Population.generatePopulation(N);
         float[] ans = FitnessEvaluation.getAns(population);
-        float[] deltaEv = new float[ev/50+1];
-        int c = 0;
-        //System.out.println(FitnessEvaluation.getMax(ans));
-        deltaEv[c] = FitnessEvaluation.getMax(ans);
-        c++;
+        float[] deltaEv = new float[ev+1];
+        float[] avg_ev = new float[ev+1];
+        float globalBest;
+        int c = 1;
+        deltaEv[0] = FitnessEvaluation.getMin(ans);
+        avg_ev[0] = FitnessEvaluation.avg(ans);
         for(int i = 0; i<ev; i++) {
             population = RouletteSelection2.createNewPopulation(population, ans);
             population = Crossover2D.mixPopulation(population);
             population = GeneticOperator.mutatePopulation(population, pc);
             ans = FitnessEvaluation.getAns(population);
-            if(i % 50 == 0){
-                deltaEv[c] = FitnessEvaluation.getMax(ans);
-                c++;
-            }
-            //System.out.println(FitnessEvaluation.getMax(ans));
+            deltaEv[c] = FitnessEvaluation.getMin(ans);
+            avg_ev[c] = FitnessEvaluation.avg(ans);
+            c++;
         }
-        for(int i = 0; i<ev/50+1; i++)
-            System.out.println(deltaEv[i]);
+        writeToFileCurrentBest(deltaEv, j);
+        writeToFileAvg(avg_ev, j);
+        //writeToFileGlobalBest();
     }
 
     public static void printPopulation(int[][] population){
@@ -55,6 +95,8 @@ public class Evaluate {
     }
 
     public static void main(String[] args) {
-        eval(200, 1000);
+        for(int i = 0; i < 10; i++) {
+            eval(20, 10000, i);
+        }
     }
 }
