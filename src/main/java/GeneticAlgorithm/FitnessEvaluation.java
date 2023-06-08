@@ -2,11 +2,11 @@ package GeneticAlgorithm;
 
 public class FitnessEvaluation {
 
-    public static float[] getAns(int[][] population){
+    public static float[] getAns(int[][] population, int genotypes){
         int len = population.length;
         float[] ans = new float[len];
         for(int i = 0; i < len; i++){
-            ans[i] = calc(population, i);
+            ans[i] = calc(population, i, genotypes);
         }
         return ans;
     }
@@ -33,29 +33,28 @@ public class FitnessEvaluation {
         return sum/len;
     }
 
-    public static float calc(int[][]population, int row){
+    public static float calc(int[][]population, int row, int genotypes){
         float ans = 0;
         int[] chromosome = Crossover2D.copy(population, row);
         int len = chromosome.length;
-        int[] genotype1 = new int[len/2];
-        int[] genotype2 = new int[len/2];
+        float[] variables = new float[genotypes];
+        String[] positionsBin = new String[genotypes];
+        String positionOne = null;
+        int[] positionDec = new int[genotypes];
         int j = 0;
-        for(int i=0; i<len; i++){
-            if(i < len/2)
-                genotype1[i] = chromosome[i];
-            else {
-                genotype2[j] = chromosome[i];
+        for(int i = 0; i < len; i++){
+            positionOne += String.valueOf(chromosome[i]);
+            if(i % 19 == 0){
+                positionsBin[j] = positionOne;
                 j++;
+                positionOne = null;
             }
         }
-        int position1 = Integer.parseInt(GeneticOperator.toString(genotype1), 2);
-        int position2 = Integer.parseInt(GeneticOperator.toString(genotype2), 2);
-        //System.out.println(position1 + "\t" + position2);
-        float x1 = GeneticOperator.decode(position1);
-        float x2 = GeneticOperator.decode(position2);
-        //System.out.println(x1 + "\t" + x2);
-        //ans = GeneticOperator.function(x1, x2);
-        ans = Functions.rosenbrock(x1, x2);
+        for(int i = 0; i < genotypes; i++){
+            positionDec[i] = Integer.parseInt(positionsBin[i], 2);
+            variables[i] = GeneticOperator.decode(positionDec[i]);
+        }
+        ans = Functions.rosenbrock(variables);
         return ans;
     }
 }

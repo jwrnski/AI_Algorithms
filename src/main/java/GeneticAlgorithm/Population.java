@@ -11,18 +11,18 @@ public class Population {
     public static float[] ans = new float[5];
 
     // Generates a chromosome with correct genotypes.
-    public static int[] generateChromosome(){
-        return GeneticOperator.generateChromosome();
+    public static int[] generateChromosome(int genotypeNum){
+        return GeneticOperator.generateChromosome(genotypeNum);
     }
 
     // Generates a population of chromosomes. Fills in a two-dimensional array with N amount of chromosomes.
-    public static int[][] generatePopulation(int N){
-        int[][] population = new int[N][2*mi];
+    public static int[][] generatePopulation(int N, int genotypeNum){
+        int[][] population = new int[N][genotypeNum*mi];
         int[] chromosome = new int[2*mi];
         for(int i=0; i<N; i++){
-            chromosome = generateChromosome();
-            while(!GeneticOperator.getGenotype(chromosome)) chromosome = generateChromosome();
-            for(int j=0; j<mi*2-1; j++){
+            chromosome = generateChromosome(genotypeNum);
+            while(!GeneticOperator.getGenotype(chromosome)) chromosome = generateChromosome(genotypeNum);
+            for(int j=0; j<mi*genotypeNum-1; j++){
                 population[i][j] = chromosome[j];
             }
         }

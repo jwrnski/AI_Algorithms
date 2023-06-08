@@ -3,7 +3,7 @@ package GeneticAlgorithm;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Crossover {
+/*public class Crossover {
 
     public static float ai = -2, bi = 2, d = 5;
     public static int mi = (int)Math.ceil((Math.log((bi - ai) * Math.pow(10, d)) / Math.log(2)));
@@ -158,4 +158,4 @@ public class Crossover {
         System.out.println(Arrays.toString(child2));
     }
 
-}
+}*/

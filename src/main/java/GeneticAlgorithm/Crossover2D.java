@@ -48,8 +48,9 @@ public class Crossover2D {
 
     // Generate two random points in the chromosome for the crossover to occur
     public static int[] crossover(int[][] population, int row, int crossWith){
-        int crossP1 = (int) Math.round(Math.random() * 38);
-        int crossP2 = (int) Math.round(Math.random() * 38);
+        int columns = population[0].length;
+        int crossP1 = (int) Math.round(Math.random() * columns);
+        int crossP2 = (int) Math.round(Math.random() * columns);
         int lower;
         int upper;
         if(crossP1 > crossP2){
@@ -60,7 +61,6 @@ public class Crossover2D {
             lower = crossP1;
             upper = crossP2;
         }
-        int columns = population[0].length;
         int[] newChromosome = new int[columns];
         for(int i = 0; i < columns - 1; i++){
             if(i < lower){
@@ -78,23 +78,26 @@ public class Crossover2D {
 
     // Check if the new chromosome and its genotypes are within bounds
     public static boolean checkChromosome(int[] chromosome){
+        boolean correct = true;
         int len = chromosome.length;
-        int position1, position2;
-        int[] genotype1 = new int[len/2];
-        int[] genotype2 = new int[len/2];
+        int genotypes = len /  19;
+        String[] positionsBin = new String[genotypes];
+        String positionOne = null;
+        int[] positionDec = new int[genotypes];
         int j = 0;
-        for(int i=0; i<len; i++){
-            if(i < len/2)
-                genotype1[i] = chromosome[i];
-            else {
-                genotype2[j] = chromosome[i];
+        for(int i = 0; i < len; i++){
+            positionOne += String.valueOf(chromosome[i]);
+            if(i % 19 == 0){
+                positionsBin[j] = positionOne;
                 j++;
+                positionOne = null;
             }
         }
-        position1 = Integer.parseInt(GeneticOperator.toString(genotype1), 2);
-        position2 = Integer.parseInt(GeneticOperator.toString(genotype2), 2);
-        //System.out.println("pos 1: " + position1 + " pos 2: " + position2);
-        return((position1 <= 400001) && (position2 <= 400001));
+        for(int i = 0; i < genotypes; i++){
+            positionDec[i] = Integer.parseInt(positionsBin[i], 2);
+            if(positionDec[i] > 400001) correct = false;
+        }
+        return correct;
     }
 
 }

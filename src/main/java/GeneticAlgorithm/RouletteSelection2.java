@@ -68,10 +68,10 @@ public class RouletteSelection2 {
         }
        /* for(int i = 0; i < size; i++){
             test += percent[i];
-        }
-        System.out.println("Fitness:\n" + Arrays.toString(fitness));
-        System.out.println("Percentage:\n" + Arrays.toString(percent));
-        System.out.println(test);*/
+        }*/
+        //System.out.println("Fitness:\n" + Arrays.toString(fitness));
+        //System.out.println("Percentage:\n" + Arrays.toString(percent));
+        //System.out.println(test);
         return percent;
     }
 
@@ -80,7 +80,7 @@ public class RouletteSelection2 {
         int rows = fitnessArray.length;
         int[] toKeep = new int[rows];
         double added = 0;
-        toKeep[0] = chance.length - 1;
+        toKeep[0] = 0;
         int j = 0, k = 0;
         for (int i = 1; i < rows; i++) {
             double pick = Math.random();
@@ -118,6 +118,7 @@ public class RouletteSelection2 {
     public static int[][] createNewPopulation(int[][] population, float[] fitness) {
         int rows = population.length;
         int columns = population[0].length;
+        int genotypeNum = columns / 19;
         int[][] newPopulation = new int[rows][columns];
         Arrays.sort(fitness);
         int[] keep = roulette(fitness);
@@ -126,7 +127,7 @@ public class RouletteSelection2 {
         int c = 0;
         for(int i = 0; i < rows; i++){
             for(int j = 0; j < rows; j++){
-                if(FitnessEvaluation.calc(population, i) == keepThese[j]){
+                if(FitnessEvaluation.calc(population, i, genotypeNum) == keepThese[j]){
                     for(int k = 0; k < columns; k++){
                         newPopulation[c][k] = population[i][k];
                     }

@@ -24,7 +24,7 @@ public class Evaluate {
     // repeat until end of evaluation steps (ev)
 
     public static void writeToFileCurrentBest(float[] values, int number){
-        String fileName = "p50_2x\\current_best\\p50_currentBest_" +  number + ".txt";
+        String fileName = "test\\current_best\\p50_currentBest_" +  number + ".txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (float val : values) {
                 writer.write(String.valueOf(val));
@@ -36,7 +36,7 @@ public class Evaluate {
         }
     }
     public static void writeToFileGlobalBest(float[] values, int number){
-        String fileName = "p50_2x\\global_best\\p50_global_Best" +  number + ".txt";
+        String fileName = "test\\global_best\\p50_global_Best" +  number + ".txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (float val : values) {
                 writer.write(String.valueOf(val));
@@ -48,7 +48,7 @@ public class Evaluate {
         }
     }
     public static void writeToFileAvg(float[] values, int number){
-        String fileName = "p50_2x\\average\\p50_avg_" +  number + ".txt";
+        String fileName = "test\\average\\p50_avg_" +  number + ".txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (float val : values) {
                 writer.write(String.valueOf(val));
@@ -60,9 +60,10 @@ public class Evaluate {
         }
     }
 
-    public static void eval(int N, int ev, int j){
-        int[][] population = Population.generatePopulation(N);
-        float[] ans = FitnessEvaluation.getAns(population);
+    public static void eval(int N, int ev, int j, int genotypeNum){
+        int[][] population = Population.generatePopulation(N,genotypeNum);
+        printPopulation(population);
+        float[] ans = FitnessEvaluation.getAns(population, genotypeNum);
         float[] deltaEv = new float[ev+1];
         float[] avg_ev = new float[ev+1];
         float[] globalBest = new float[ev+1];
@@ -76,7 +77,7 @@ public class Evaluate {
             population = RouletteSelection2.createNewPopulation(population, ans);
             population = Crossover2D.mixPopulation(population);
             population = GeneticOperator.mutatePopulation(population, pc);
-            ans = FitnessEvaluation.getAns(population);
+            ans = FitnessEvaluation.getAns(population, genotypeNum);
             deltaEv[c] = FitnessEvaluation.getMin(ans);
             avg_ev[c] = FitnessEvaluation.avg(ans);
             currentMin = FitnessEvaluation.getMin(ans);
@@ -106,8 +107,9 @@ public class Evaluate {
     }
 
     public static void main(String[] args) {
-        for(int i = 0; i < 30; i++) {
-            eval(50, 10000, i);
-        }
+        eval(10, 1, 1, 5);
+        //for(int i = 0; i < 30; i++) {
+        //    eval(10, 2, i);
+       // }
     }
 }
